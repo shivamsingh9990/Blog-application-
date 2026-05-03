@@ -3,23 +3,24 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BlogCard from "../components/Blogcard";
 import { toast } from "react-toastify";
-import { useAuth } from "../contexts/AuthContext";
 
 const MyBlogs = function () {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(function () {
     async function fetchMyBlogs() {
-      if (!user?.email) {
+      const email = localStorage.getItem("userEmail");
+      if (!email) {
         setBlogs([]);
         setIsLoading(false);
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/blogs/${encodeURIComponent(user.email)}`);
+        const response = await axios.get(
+          `https://blog-application-lwf0.onrender.com/api/v1/blogs${encodeURIComponent(email)}`,
+        );
         setBlogs(response.data);
       } catch (error) {
         console.log(error);
@@ -28,7 +29,7 @@ const MyBlogs = function () {
       }
     }
     fetchMyBlogs();
-  }, [user]);
+  }, []);
 
   const handleEdit = (blog) => {
     navigate("/add-blogs", { state: { blog } });
@@ -37,9 +38,10 @@ const MyBlogs = function () {
   const handleDelete = async (blogId) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
+    const userEmail = localStorage.getItem("userEmail");
     try {
       await axios.delete(`http://localhost:8080/api/v1/blogs/${blogId}`, {
-        data: { userEmail: user.email },
+        data: { userEmail },
       });
       setBlogs(blogs.filter(blog => blog._id !== blogId));
       toast("Blog deleted successfully");
