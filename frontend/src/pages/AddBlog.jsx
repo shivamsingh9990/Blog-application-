@@ -3,10 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { SquarePen } from "lucide-react";
 import { toast } from "react-toastify";
+import { useAuth } from "../contexts/AuthContext";
 
 const AddBlog = function () {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const editingBlog = location.state?.blog;
 
   const [title, setTitle] = useState("");
@@ -31,7 +33,11 @@ const AddBlog = function () {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const userEmail = localStorage.getItem("userEmail");
+    if (!user?.email) {
+      toast.error("You must be logged in to create a blog");
+      return;
+    }
+
     const newBlog = {
       title: title,
       content: content,
@@ -42,7 +48,7 @@ const AddBlog = function () {
         .filter((tag) => tag),
       imageUrl: imagePreview,
       imageDescription,
-      userEmail,
+      userEmail: user.email,
     };
 
     try {

@@ -8,9 +8,12 @@ import MyBlogs from "./pages/MyBlogs";
 import Navbar from "./components/NavBar";
 import Signup from "./pages/signup";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 const AppContent = () => {
   const location = useLocation();
+  const { user } = useAuth();
   // Hide Navbar on /login and /signup
   const hideNavbar = location.pathname === "/login" || location.pathname === "/signup";
 
@@ -19,14 +22,14 @@ const AppContent = () => {
       {!hideNavbar && <Navbar />}
       <div className="container mx-auto px-4 py-8">
         <Routes>
-          <Route path="/" element={<Navigate to="/home" />}/>
+          <Route path="/" element={<Navigate to="/login" />}/>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/blogs" element={<AllBlogs />} />
-          <Route path="/my-blogs" element={<MyBlogs />} />
-          <Route path="/add-blogs" element={<AddBlog />} />
+          <Route path="/blogs" element={<ProtectedRoute user={user}><AllBlogs /></ProtectedRoute>} />
+          <Route path="/my-blogs" element={<ProtectedRoute user={user}><MyBlogs /></ProtectedRoute>} />
+          <Route path="/add-blogs" element={<ProtectedRoute user={user}><AddBlog /></ProtectedRoute>} />
         </Routes>
       </div>
     </div>
@@ -34,10 +37,11 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <BrowserRouter>
-    <AppContent />
-  </BrowserRouter>
+  <AuthProvider>
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  </AuthProvider>
 );
 
 export default App;
-// filepath: c:\Users\Shivam\Documents\full_stack_project[1]\full stack project\frontend\src\App.jsx

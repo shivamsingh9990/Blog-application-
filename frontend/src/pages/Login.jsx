@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,16 +34,11 @@ function Login() {
       .post("http://localhost:8080/login", { email, password })
       .then(result => {
         if (result.data.msg === "success") {
-          try {
-            const user = result.data.user || {};
-            const storedEmail = user.email || email;
-            const storedName = user.name || (storedEmail ? storedEmail.split('@')[0] : "");
-            localStorage.setItem("userEmail", storedEmail);
-            localStorage.setItem("userName", storedName);
-          } catch {}
+          const user = result.data.user;
+          login(user);
           setMessageType("success");
-          setMessage("✓ Login successful! Redirecting...");
-          setTimeout(() => navigate('/home'), 1000);
+          setMessage("✓ Login successful! Redirecting to My Blogs...");
+          setTimeout(() => navigate('/my-blogs'), 1000);
         } else {
           setMessageType("error");
           setMessage(result.data.msg || "Login failed");

@@ -4,21 +4,22 @@ import { toast } from "react-toastify";
 
 import BlogCard from "../components/Blogcard";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const AllBlogs = function () {
+  const { user } = useAuth();
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(function () {
     async function FetchBlogs() {
-      const email = typeof window !== 'undefined' ? localStorage.getItem("userEmail") : null;
-      if (!email) {
+      if (!user?.email) {
         setBlogs([]);
         setIsLoading(false);
         return;
       }
       try {
-        const response = await axios.get(`http://localhost:8080/api/v1/blogs/${encodeURIComponent(email)}`);
+        const response = await axios.get(`http://localhost:8080/api/v1/blogs/${encodeURIComponent(user.email)}`);
         setBlogs(response.data);
       } catch (error) {
         toast.error("No blog something went wrong!!!!");

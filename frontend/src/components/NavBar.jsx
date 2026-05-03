@@ -1,16 +1,13 @@
 import { Link, useNavigate } from "react-router-dom"; // Fix import
+import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = function () {
   const navigate = useNavigate();
-  const userEmail = typeof window !== 'undefined' ? localStorage.getItem("userEmail") : null;
-  const userName = typeof window !== 'undefined' ? localStorage.getItem("userName") : null;
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
-    try {
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("userName");
-    } catch {}
-    navigate("/signup");
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -31,25 +28,30 @@ const Navbar = function () {
             <Link to="/blogs" className="hover:text-blue-200 transition-colors">
               EXPLORE BLOGS
             </Link>
-            <Link to="/my-blogs" className="hover:text-blue-200 transition-colors">
-              MY BLOGS
-            </Link>
-            <Link
-              to="/add-blogs"
-              className="hover:text-blue-200 transition-colors"
-            >
-              CREATE BLOG
-            </Link>
-             {userEmail && (
-              <span className="ml-4 text-sm opacity-90 whitespace-nowrap">{userName || "User"} ({userEmail})</span>
+            {user && (
+              <>
+                <Link to="/my-blogs" className="hover:text-blue-200 transition-colors">
+                  MY BLOGS
+                </Link>
+                <Link
+                  to="/add-blogs"
+                  className="hover:text-blue-200 transition-colors"
+                >
+                  CREATE BLOG
+                </Link>
+              </>
             )}
-            <button
-              onClick={handleLogout}
-              className="ml-4 bg-red-400 font-bold text-white px-4 py-2 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
-           
+             {user && (
+              <span className="ml-4 text-sm opacity-90 whitespace-nowrap">{user.name || "User"} ({user.email})</span>
+            )}
+            {user && (
+              <button
+                onClick={handleLogout}
+                className="ml-4 bg-red-400 font-bold text-white px-4 py-2 rounded hover:bg-red-700"
+              >
+                Logout
+              </button>
+            )}
           </nav>
         </div>
       </div>
