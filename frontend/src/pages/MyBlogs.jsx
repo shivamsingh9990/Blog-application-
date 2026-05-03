@@ -19,7 +19,7 @@ const MyBlogs = function () {
       }
       try {
         const response = await axios.get(
-          `https://blog-application-lwf0.onrender.com/api/v1/blogs${encodeURIComponent(email)}`,
+          `https://blog-application-lwf0.onrender.com/api/v1/blogs`,
         );
         setBlogs(response.data);
       } catch (error) {
