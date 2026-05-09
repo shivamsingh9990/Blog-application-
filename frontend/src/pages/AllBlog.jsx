@@ -11,25 +11,32 @@ const AllBlogs = function () {
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(function () {
-    async function FetchBlogs() {
-      if (!user?.email) {
-        setBlogs([]);
-        setIsLoading(false);
-        return;
-      }
-      try {
-        const response = await axios.get(`http://localhost:8080/api/v1/blogs/${encodeURIComponent(user.email)}`);
-        setBlogs(response.data);
-      } catch (error) {
-        toast.error("No blog something went wrong!!!!");
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    FetchBlogs();
-  }, []);
+ const API = import.meta.env.VITE_API_URL;
+
+ useEffect(function () {
+   async function FetchBlogs() {
+     if (!user?.email) {
+       setBlogs([]);
+       setIsLoading(false);
+       return;
+     }
+
+     try {
+       const response = await axios.get(
+         `${API}/api/v1/blogs/${encodeURIComponent(user.email)}`,
+       );
+
+       setBlogs(response.data);
+     } catch (error) {
+       toast.error("No blog something went wrong!!!!");
+       console.log(error);
+     } finally {
+       setIsLoading(false);
+     }
+   }
+
+   FetchBlogs();
+ }, []);
   return (
     <main>
       <div className="text-center mb-8">

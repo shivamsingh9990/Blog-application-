@@ -8,7 +8,12 @@ const EmployeeModel = require("./models/Employee"); // <-- Add this
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://blog-application-rosy-gamma.vercel.app",
+    credentials: true,
+  }),
+);
 
 const PORT = process.env.PORT;
 const Blog = require("./models/blog"); // Make sure this is your blog model
