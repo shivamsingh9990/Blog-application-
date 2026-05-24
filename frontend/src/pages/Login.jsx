@@ -31,7 +31,7 @@ function Login() {
 
     setLoading(true);
     axios
-      .post(axios.post(`${import.meta.env.VITE_API_URL}/login`), {
+      .post((`${import.meta.env.VITE_API_URL}/login`), {
         email,
         password,
       })

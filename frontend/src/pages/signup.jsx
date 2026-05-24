@@ -44,7 +44,7 @@ function Signup() {
 
     setLoading(true);
     axios
-      .post(axios.post(`${import.meta.env.VITE_API_URL}/register`  ), {
+      .post((`${import.meta.env.VITE_API_URL}/register`  ), {
         name,
         email,
         password,
