@@ -31,7 +31,10 @@ function Login() {
 
     setLoading(true);
     axios
-      .post("https://blog-application-lwf0.onrender.com/login", { email, password })
+      .post(axios.post(`${import.meta.env.VITE_API_URL}/login`), {
+        email,
+        password,
+      })
       .then((result) => {
         if (result.data.msg === "success") {
           const user = result.data.user;

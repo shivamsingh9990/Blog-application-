@@ -44,7 +44,11 @@ function Signup() {
 
     setLoading(true);
     axios
-      .post("http://localhost:8080/register", { name, email, password })
+      .post(axios.post(`${import.meta.env.VITE_API_URL}/register`  ), {
+        name,
+        email,
+        password,
+      })
       .then((result) => {
         setMessageType("success");
         setMessage("✓ Signup successful! Redirecting to login...");
@@ -52,7 +56,9 @@ function Signup() {
       })
       .catch((err) => {
         setMessageType("error");
-        setMessage(err.response?.data?.msg || "Registration failed. Try again!");
+        setMessage(
+          err.response?.data?.msg || "Registration failed. Try again!",
+        );
         setLoading(false);
       });
   };
