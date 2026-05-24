@@ -31,21 +31,21 @@ function Login() {
 
     setLoading(true);
     axios
-      .post("http://localhost:8080/login", { email, password })
-      .then(result => {
+      .post("https://blog-application-lwf0.onrender.com/login", { email, password })
+      .then((result) => {
         if (result.data.msg === "success") {
           const user = result.data.user;
           login(user);
           setMessageType("success");
           setMessage("✓ Login successful! Redirecting to My Blogs...");
-          setTimeout(() => navigate('/my-blogs'), 1000);
+          setTimeout(() => navigate("/my-blogs"), 1000);
         } else {
           setMessageType("error");
           setMessage(result.data.msg || "Login failed");
           setLoading(false);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setMessageType("error");
         setMessage(err.response?.data?.msg || "Login failed. Try again!");
         setLoading(false);
