@@ -50,22 +50,25 @@ const AddBlog = function () {
       imageDescription,
       userEmail: user.email,
     };
-
     try {
       setIsLoading(true);
+
       if (editingBlog) {
         await axios.put(
           `${import.meta.env.VITE_API_URL}/api/v1/blogs/${editingBlog._id}`,
           newBlog,
         );
+
         toast("Blog updated successfully");
       } else {
         await axios.post(
-          "`${import.meta.env.VITE_API_URL}/api/v1/blogs`",
+          `${import.meta.env.VITE_API_URL}/api/v1/blogs`,
           newBlog,
         );
+
         toast("New blog added");
       }
+
       navigate("/blogs");
     } catch (error) {
       console.log(error);
@@ -186,7 +189,9 @@ const AddBlog = function () {
               />
             </div>
           ) : (
-            <p className="text-sm text-gray-500 mt-2">Choose an image to show with your blog.</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Choose an image to show with your blog.
+            </p>
           )}
         </div>
 
@@ -236,7 +241,11 @@ const AddBlog = function () {
             disabled={isLoading}
             className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50"
           >
-            {isLoading ? "Saving..." : editingBlog ? "Update Blog" : "Publish Blog"}
+            {isLoading
+              ? "Saving..."
+              : editingBlog
+                ? "Update Blog"
+                : "Publish Blog"}
           </button>
         </div>
       </form>
