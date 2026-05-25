@@ -11,6 +11,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: "https://blog-application-rosy-gamma.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
