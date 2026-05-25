@@ -54,10 +54,16 @@ const AddBlog = function () {
     try {
       setIsLoading(true);
       if (editingBlog) {
-        await axios.put(`http://localhost:8080/api/v1/blogs/${editingBlog._id}`, newBlog);
+        await axios.put(
+          `${import.meta.env.VITE_API_URL}/api/v1/blogs/${editingBlog._id}`,
+          newBlog,
+        );
         toast("Blog updated successfully");
       } else {
-        await axios.post("http://localhost:8080/api/v1/blogs", newBlog);
+        await axios.post(
+          "`${import.meta.env.VITE_API_URL}/api/v1/blogs`",
+          newBlog,
+        );
         toast("New blog added");
       }
       navigate("/blogs");
